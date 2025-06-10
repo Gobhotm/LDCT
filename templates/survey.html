@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>แบบสอบถามสุขภาพปอด</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(120deg, #e0eafc, #cfdef3 100%);
+            margin: 0; padding: 0;
+            color: #222;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 650px;
+            margin: 40px auto;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.13);
+            padding: 32px 28px 24px 28px;
+        }
+        h1 {
+            text-align: center;
+            color: #1976d2;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        .progress-bar {
+            width: 100%;
+            background: #e3e3e3;
+            border-radius: 6px;
+            margin-bottom: 28px;
+            height: 12px;
+            overflow: hidden;
+        }
+        .progress {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #1976d2, #64b5f6);
+            transition: width 0.3s;
+        }
+        form label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: block;
+            color: #1976d2;
+        }
+        .question {
+            margin-bottom: 22px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .radio-group {
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .radio-label {
+            background: #f5f7fa;
+            border-radius: 6px;
+            padding: 8px 14px;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            font-size: 1.04rem;
+            transition: border 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+        }
+        .radio-label:hover, .radio-label input:checked + span {
+            border: 1.5px solid #1976d2;
+            background: #e3f2fd;
+        }
+        .radio-label input[type="radio"] {
+            margin-right: 8px;
+            accent-color: #1976d2;
+            width: 18px;
+            height: 18px;
+        }
+        button[type="submit"] {
+            width: 100%;
+            background: linear-gradient(90deg, #1976d2, #64b5f6);
+            border: none;
+            padding: 16px 0;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 7px;
+            cursor: pointer;
+            margin-top: 28px;
+            box-shadow: 0 2px 10px rgba(25, 118, 210, 0.08);
+            transition: background 0.2s;
+        }
+        button[type="submit"]:hover {
+            background: linear-gradient(90deg, #1565c0, #42a5f5);
+        }
+        @media (max-width: 700px) {
+            .container { padding: 16px 4vw 12px 4vw; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>แบบประเมินตนเอง ความเสี่ยงโรคปอด</h1>
+        <p style="color:#777; font-size:0.98rem; margin-top:-10px; margin-bottom:26px;">
+        แบบสอบถามนี้เป็นเพียงการคัดกรองขั้นต้น เพื่อใช้เป็นแนวทางในการให้บริการเท่านั้น กรุณากรอกแบบสอบถามให้ครบทุกข้อ เพื่อการประเมินที่ถูกต้อง
+        </p>
+        <div class="progress-bar">
+            <div class="progress"></div>
+        </div>
+        <form method="POST" id="surveyForm">
+            <div class="question">
+                <label>1. คุณเคยสูบบุหรี่หรือไม่?</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="smoking" value="0" required><span>ไม่เคย (0 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="smoking" value="1"><span>สูบในอดีต (1 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="smoking" value="2"><span>ปัจจุบันยังสูบอยู่ (2 คะแนน)</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label>2. หากเคยหรือกำลังสูบบุหรี่ คุณสูบมาแล้วกี่ปี?</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="years_smoking" value="0" required><span>ไม่เคยสูบ (0 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="years_smoking" value="1"><span>น้อยกว่า 10 ปี (1 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="years_smoking" value="2"><span>มากกว่า 10 ปี (2 คะแนน)</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label>3. คุณเคยได้รับควันบุหรี่มือสองเป็นประจำหรือไม่?</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="secondhand_smoke" value="0" required><span>ไม่เคย (0 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="secondhand_smoke" value="1"><span>บางครั้ง (1 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="secondhand_smoke" value="2"><span>เป็นประจำ (2 คะแนน)</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label>4. ที่อยู่อาศัย หรือที่ทำงานของคุณมีปริมาณฝุ่น PM 2.5 หรือสารพิษในอากาศสูงหรือไม่?</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="pm25" value="0" required><span>ไม่มีเลย (0 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="pm25" value="1"><span>มีฝุ่นบางวัน (1 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="pm25" value="2"><span>มีฝุ่นเป็นประจำทุกวัน (2 คะแนน)</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label>5. คุณมีอาการไอเรื้อรังติดต่อกันนานเกิน 1 เดือนหรือไม่?</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="chronic_cough" value="0" required><span>ไม่เคย (0 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="chronic_cough" value="1"><span>เคย (1 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="chronic_cough" value="2"><span>เป็นอยู่ตอนนี้ (2 คะแนน)</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label>6. คุณมีอาการหายใจลำบาก/เหนื่อยง่ายแม้ไม่ได้ออกแรงมากหรือไม่?</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="shortness_of_breath" value="0" required><span>ไม่เลย (0 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="shortness_of_breath" value="1"><span>เป็นบางครั้ง (1 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="shortness_of_breath" value="2"><span>เป็นประจำ (2 คะแนน)</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label>7. คุณมีอาการเสียงวี๊ดในอก (wheezing) หรือแน่นหน้าอกบ่อยหรือไม่?</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="wheezing" value="0" required><span>ไม่เลย (0 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="wheezing" value="1"><span>บางครั้ง (1 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="wheezing" value="2"><span>บ่อยครั้ง (2 คะแนน)</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label>8. เคยมีโรคประจำตัวหรือประวัติการรักษาเกี่ยวกับปอด เช่น หอบหืด, ปอดอักเสบ, ถุงลมโป่งพอง COVID-19 หรือไม่?</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="lung_disease_history" value="0" required><span>ไม่เคย (0 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="lung_disease_history" value="1"><span>เคยเป็น และหายแล้ว (1 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="lung_disease_history" value="2"><span>เป็นโรคเรื้อรัง (2 คะแนน)</span></label>
+                </div>
+            </div>
+            <div class="question">
+                <label>9. มีประวัติมะเร็งปอดในครอบครัว (ญาติสายตรง) หรือไม่?</label>
+                <div class="radio-group">
+                    <label class="radio-label"><input type="radio" name="family_cancer_history" value="0" required><span>ไม่มี (0 คะแนน)</span></label>
+                    <label class="radio-label"><input type="radio" name="family_cancer_history" value="2"><span>มี (2 คะแนน)</span></label>
+                </div>
+            </div>
+            <button type="submit">ส่งแบบสอบถาม</button>
+        </form>
+    </div>
+    <script>
+        // Progress bar ตามจำนวนข้อที่ตอบ
+        const totalQuestions = 9;
+        const form = document.getElementById('surveyForm');
+        const progress = document.querySelector('.progress');
+        const radios = form.querySelectorAll('input[type="radio"]');
+        function updateProgress() {
+            let answered = 0;
+            for (let i = 1; i <= totalQuestions; i++) {
+                if (form.querySelector(`input[name="${form.elements[i*2-2].name}"]:checked`)) answered++;
+            }
+            progress.style.width = (answered / totalQuestions * 100) + '%';
+        }
+        radios.forEach(radio => radio.addEventListener('change', updateProgress));
+        updateProgress();
+    </script>
+</body>
+</html>

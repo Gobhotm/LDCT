@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ผลการประเมินความเสี่ยงโรคปอด</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kanit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 0;
+            margin: 0;
+            background: linear-gradient(120deg, #e0eafc, #cfdef3 100%);
+            min-height: 100vh;
+        }
+        .card {
+            background-color: #fff;
+            padding: 32px 28px 24px 28px;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.13);
+            max-width: 480px;
+            margin: 48px auto 0 auto;
+        }
+        h1 {
+            color: #1976d2;
+            font-size: 1.5rem;
+            margin-bottom: 18px;
+            font-weight: 600;
+            text-align: center;
+        }
+        h2 {
+            color: #2c3e50;
+            font-size: 1.2rem;
+            margin-top: 0;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .result-label {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        p {
+            font-size: 1.08rem;
+            margin: 8px 0;
+        }
+        hr {
+            margin: 24px 0 18px 0;
+            border: none;
+            border-top: 1.5px solid #f0f0f0;
+        }
+        label {
+            font-weight: 500;
+            margin-top: 6px;
+            display: block;
+            color: #1976d2;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0 18px 0;
+            border: 1.5px solid #ddd;
+            border-radius: 7px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        input[type="text"]:focus, input[type="email"]:focus {
+            border-color: #1976d2;
+            outline: none;
+        }
+        button {
+            background: linear-gradient(90deg, #1976d2, #64b5f6);
+            color: white;
+            padding: 14px 0;
+            border: none;
+            border-radius: 7px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 6px;
+            box-shadow: 0 2px 10px rgba(25, 118, 210, 0.08);
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: linear-gradient(90deg, #1565c0, #42a5f5);
+        }
+        a {
+            display: inline-block;
+            margin-top: 18px;
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        a:hover {
+            color: #0d47a1;
+            text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            .card {
+                padding: 16px 4vw 12px 4vw;
+                margin: 16px auto 0 auto;
+            }
+            h1 { font-size: 1.1rem; }
+            h2 { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>ผลการประเมินความเสี่ยงโรคปอด</h1>
+        <h2>คะแนนรวมของคุณ: {{ total_score }}</h2>
+        <p><span class="result-label">ระดับความเสี่ยง:</span> {{ risk_level }}</p>
+        <p><span class="result-label">คำแนะนำ:</span> {{ recommendation }}</p>
+        <hr>
+        <h3 style="color:#1976d2; margin-bottom:6px;">กรอกข้อมูลสำหรับติดต่อกลับ</h3>
+        <form method="POST" action="{{ url_for('contact') }}">
+            <label for="name">ชื่อ:</label>
+            <input type="text" name="name" id="name" placeholder="กรุณากรอกชื่อ" required>
+            <label for="email">E-mail:</label>
+            <input type="email" name="email" id="email" placeholder="example@email.com" required>
+            <button type="submit">ส่งข้อมูลการติดต่อ</button>
+        </form>
+        <hr>
+        <a href="/">กลับไปทำแบบสอบถามใหม่</a>
+    </div>
+</body>
+</html>
