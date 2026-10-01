@@ -1,0 +1,5 @@
+providers = ["python"]
+
+[start]
+cmd = "gunicorn LDCT:app"
+
