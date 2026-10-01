@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>แบบสอบถามสุขภาพปอด</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00796b; /* Teal */
+            --primary-light: #e0f2f1;
+            --accent-color: #ff8a65; /* Light Coral */
+            --background-color: #f5f7fa;
+            --text-color: #37474f;
+            --border-color: #dce1e5;
+            --container-bg: #ffffff;
+            --shadow-color: rgba(50, 50, 93, 0.1);
+            --shadow-hover-color: rgba(50, 50, 93, 0.15);
+        }
+
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            background-color: var(--background-color);
+            margin: 0; 
+            padding: 20px;
+            color: var(--text-color);
+        }
+        body.en { font-family: 'Roboto', sans-serif; }
+
+        .container { 
+            max-width: 750px; 
+            margin: 40px auto; 
+            background: var(--container-bg); 
+            border-radius: 20px; 
+            box-shadow: 0 12px 28px 0 var(--shadow-color);
+            padding: 40px 50px; 
+            overflow: hidden; 
+        }
+
+        .lang-selector { 
+            text-align: right; 
+            margin-bottom: 20px; 
+        }
+        .lang-btn { 
+            background: none; 
+            border: 1px solid var(--primary-color); 
+            color: var(--primary-color); 
+            padding: 6px 12px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .lang-btn.active, .lang-btn:hover { 
+            background: var(--primary-color); 
+            color: white; 
+        }
+
+        h1 { 
+            text-align: center; 
+            color: var(--primary-color); 
+            margin-bottom: 15px; 
+            font-weight: 700;
+        }
+        .intro-text { 
+            color: #546e7a; 
+            text-align: center; 
+            margin-top: -10px; 
+            margin-bottom: 35px; 
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .progress-bar { 
+            width: 100%; 
+            background: #e9ecef; 
+            border-radius: 10px; 
+            margin-bottom: 35px; 
+            height: 16px; 
+            overflow: hidden; 
+        }
+        .progress { 
+            width: 0%; 
+            height: 100%; 
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color)); 
+            transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1); 
+        }
+
+        .question { 
+            margin-bottom: 28px; 
+            padding-bottom: 20px; 
+            border-bottom: 1px solid #f0f2f5; 
+            opacity: 0; 
+            transform: translateY(20px); 
+            animation: fadeInUp 0.5s ease-out forwards; 
+        }
+        @keyframes fadeInUp { 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        form label { 
+            font-weight: 600; 
+            display: block; 
+            color: var(--primary-color); 
+            font-size: 1.15rem; 
+            margin-bottom: 12px;
+        }
+
+        .radio-group { 
+            margin-top: 8px; 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px; 
+        }
+        .radio-label { 
+            background: #f8f9fa; 
+            border-radius: 12px; 
+            padding: 14px 18px; 
+            cursor: pointer; 
+            border: 2px solid var(--border-color); 
+            transition: all 0.3s ease; 
+            display: flex; 
+            align-items: center;
+        }
+        .radio-label:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 6px 16px var(--shadow-hover-color);
+            border-color: var(--primary-color); 
+        }
+        .radio-label input[type="radio"] { display: none; }
+
+        .radio-label.selected { 
+            border-color: var(--primary-color); 
+            background: var(--primary-light); 
+            transform: translateY(-2px); 
+            box-shadow: 0 4px 12px var(--shadow-color);
+            font-weight: 600;
+        }
+        .radio-label::before { 
+            content: ''; 
+            width: 20px; 
+            height: 20px; 
+            border-radius: 50%; 
+            border: 2px solid var(--border-color); 
+            margin-right: 14px; 
+            transition: all 0.25s ease; 
+            background-color: #fff; 
+        }
+        .radio-label.selected::before { 
+            background-color: var(--primary-color); 
+            border-color: var(--primary-color); 
+            box-shadow: 0 0 0 2px white inset; 
+        }
+
+        button[type="submit"] { 
+            width: 100%; 
+            background: linear-gradient(90deg, var(--primary-color), #009688); 
+            border: none; 
+            padding: 18px 0; 
+            color: white; 
+            font-size: 1.3rem; 
+            font-weight: 700; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            margin-top: 30px; 
+            box-shadow: 0 4px 20px rgba(0, 121, 107, 0.25);
+            transition: all 0.3s ease; 
+        }
+        button[type="submit"]:hover, button[type="submit"].ready { 
+            background: linear-gradient(90deg, #00695c, #00796b); 
+            box-shadow: 0 7px 25px rgba(0, 121, 107, 0.35);
+            transform: translateY(-3px); 
+        }
+        button[type="submit"].ready { 
+            animation: pulse 1.8s infinite; 
+        }
+        @keyframes pulse { 
+            0% { transform: translateY(-3px) scale(1); } 
+            50% { transform: translateY(-3px) scale(1.04); } 
+            100% { transform: translateY(-3px) scale(1); } 
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="lang-selector">
+            <button id="lang-th" class="lang-btn active">ไทย</button>
+            <button id="lang-en" class="lang-btn">English</button>
+        </div>
+        <h1 id="survey-title">แบบประเมินตนเอง ความเสี่ยงโรคปอด</h1>
+        <p id="intro-text" class="intro-text">
+        แบบสอบถามนี้เป็นเพียงการคัดกรองขั้นต้น เพื่อใช้เป็นแนวทางในการให้บริการเท่านั้น<br> 
+        กรุณากรอกแบบสอบถามให้ครบทุกข้อ เพื่อการประเมินที่ถูกต้อง</p>
+        <div class="progress-bar"><div id="progress" class="progress"></div></div>
+        
+        <form id="surveyForm" method="POST" action="{{ url_for('survey') }}">
+             <input type="hidden" name="lang" id="lang-input" value="th">
+            <!-- Questions are inserted here by JS -->
+        </form>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('surveyForm');
+        const progress = document.getElementById('progress');
+        const langInput = document.getElementById('lang-input');
+        let currentLanguage = 'th';
+
+        const translations = {
+            th: {
+                title: 'แบบสอบถามสุขภาพปอด',
+                header: 'แบบประเมินตนเอง ความเสี่ยงโรคปอด',
+                intro: 'แบบสอบถามนี้เป็นเพียงการคัดกรองขั้นต้น เพื่อใช้เป็นแนวทางในการให้บริการเท่านั้น<br>กรุณากรอกแบบสอบถามให้ครบทุกข้อ เพื่อการประเมินที่ถูกต้อง',
+                submitButton: 'ส่งแบบประเมิน',
+                scoreSuffix: 'คะแนน',
+                questions: [
+                    { name: 'smoking', label: '1. คุณเคยสูบบุหรี่หรือไม่?', options: [{ text: 'ไม่เคย', value: 0 }, { text: 'สูบในอดีต', value: 1 }, { text: 'ปัจจุบันยังสูบอยู่', value: 2 }] },
+                    { name: 'years_smoking', label: '2. หากเคยหรือกำลังสูบบุหรี่ คุณสูบมาแล้วกี่ปี?', options: [{ text: 'ไม่เคยสูบ', value: 0 }, { text: 'น้อยกว่า 10 ปี', value: 1 }, { text: 'มากกว่า 10 ปี', value: 2 }] },
+                    { name: 'secondhand_smoke', label: '3. คุณเคยได้รับควันบุหรี่มือสองเป็นประจำหรือไม่?', options: [{ text: 'ไม่เคย', value: 0 }, { text: 'บางครั้ง', value: 1 }, { text: 'เป็นประจำ', value: 2 }] },
+                    { name: 'pm25', label: '4. ที่อยู่อาศัย หรือที่ทำงานของคุณมีปริมาณฝุ่น PM 2.5 หรือสารพิษในอากาศสูงหรือไม่?', options: [{ text: 'ไม่มีเลย', value: 0 }, { text: 'มีฝุ่นบางวัน', value: 1 }, { text: 'มีฝุ่นเป็นประจำ', value: 2 }] },
+                    { name: 'chronic_cough', label: '5. คุณมีอาการไอเรื้อรังติดต่อกันนานเกิน 1 เดือนหรือไม่?', options: [{ text: 'ไม่เคย', value: 0 }, { text: 'เคย', value: 1 }, { text: 'เป็นอยู่ตอนนี้', value: 2 }] },
+                    { name: 'shortness_of_breath', label: '6. คุณมีอาการหายใจลำบาก/เหนื่อยง่ายแม้ไม่ได้ออกแรงมากหรือไม่?', options: [{ text: 'ไม่เลย', value: 0 }, { text: 'เป็นบางครั้ง', value: 1 }, { text: 'เป็นประจำ', value: 2 }] },
+                    { name: 'wheezing', label: '7. คุณมีอาการเสียงวี๊ดในอก (wheezing) หรือแน่นหน้าอกบ่อยหรือไม่?', options: [{ text: 'ไม่เลย', value: 0 }, { text: 'บางครั้ง', value: 1 }, { text: 'บ่อยครั้ง', value: 2 }] },
+                    { name: 'lung_disease_history', label: '8. เคยมีโรคประจำตัวหรือประวัติการรักษาเกี่ยวกับปอด เช่น หอบหืด, ปอดอักเสบ, ถุงลมโป่งพอง COVID-19 หรือไม่?', options: [{ text: 'ไม่เคย', value: 0 }, { text: 'เคยเป็น', value: 1 }, { text: 'เป็นโรคเรื้อรัง', value: 2 }] },
+                    { name: 'family_cancer_history', label: '9. มีประวัติมะเร็งปอดในครอบครัว (ญาติสายตรง) หรือไม่?', options: [{ text: 'ไม่มี', value: 0 }, { text: 'มี', value: 2 }] }
+                ]
+            },
+            en: {
+                title: 'Lung Health Survey',
+                header: 'Lung Cancer Risk Self-Assessment',
+                intro: 'This questionnaire is a preliminary screening tool for guidance purposes only.<br>Please complete all questions for an accurate assessment.',
+                submitButton: 'Submit Assessment',
+                scoreSuffix: 'points',
+                questions: [
+                    { name: 'smoking', label: '1. Have you ever smoked?', options: [{ text: 'Never', value: 0 }, { text: 'Smoked in the past', value: 1 }, { text: 'Currently smoking', value: 2 }] },
+                    { name: 'years_smoking', label: '2. If you have ever smoked, for how many years?', options: [{ text: 'Never smoked', value: 0 }, { text: 'Less than 10 years', value: 1 }, { text: 'More than 10 years', value: 2 }] },
+                    { name: 'secondhand_smoke', label: '3. Are you regularly exposed to secondhand smoke?', options: [{ text: 'Never', value: 0 }, { text: 'Sometimes', value: 1 }, { text: 'Regularly', value: 2 }] },
+                    { name: 'pm25', label: '4. Is your residence or workplace exposed to high levels of PM2.5 dust or air pollutants?', options: [{ text: 'Not at all', value: 0 }, { text: 'Some days', value: 1 }, { text: 'Regularly', value: 2 }] },
+                    { name: 'chronic_cough', label: '5. Do you have a chronic cough lasting more than 1 month?', options: [{ text: 'Never', value: 0 }, { text: 'I have before', value: 1 }, { text: 'Currently have it', value: 2 }] },
+                    { name: 'shortness_of_breath', label: '6. Do you experience shortness of breath/easy fatigue without much exertion?', options: [{ text: 'Not at all', value: 0 }, { text: 'Sometimes', value: 1 }, { text: 'Regularly', value: 2 }] },
+                    { name: 'wheezing', label: '7. Do you often experience wheezing or chest tightness?', options: [{ text: 'Not at all', value: 0 }, { text: 'Sometimes', value: 1 }, { text: 'Frequently', value: 2 }] },
+                    { name: 'lung_disease_history', label: '8. Do you have a history of lung diseases such as asthma, pneumonia, emphysema, or COVID-19?', options: [{ text: 'No history', value: 0 }, { text: 'Have a history', value: 1 }, { text: 'Have a chronic condition', value: 2 }] },
+                    { name: 'family_cancer_history', label: '9. Is there a history of lung cancer in your immediate family?', options: [{ text: 'No', value: 0 }, { text: 'Yes', value: 2 }] }
+                ]
+            }
+        };
+
+        function renderSurvey(lang) {
+            currentLanguage = lang;
+            langInput.value = lang;
+            document.documentElement.lang = lang;
+            document.body.className = lang;
+
+            const t = translations[lang];
+            document.title = t.title;
+            document.getElementById('survey-title').textContent = t.header;
+            document.getElementById('intro-text').innerHTML = t.intro;
+
+            // Clear previous questions
+            form.innerHTML = ''; 
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = 'lang';
+            hiddenInput.value = lang;
+            form.appendChild(hiddenInput);
+
+
+            const questions = t.questions;
+            questions.forEach((q, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'question';
+                qDiv.style.animationDelay = `${index * 0.1}s`;
+                const qLabel = document.createElement('label');
+                qLabel.textContent = q.label;
+                qDiv.appendChild(qLabel);
+                const radioGroup = document.createElement('div');
+                radioGroup.className = 'radio-group';
+                q.options.forEach(opt => {
+                    const radioLabel = document.createElement('label');
+                    radioLabel.className = 'radio-label';
+                    const radioInput = document.createElement('input');
+                    radioInput.type = 'radio';
+                    radioInput.name = q.name;
+                    radioInput.value = opt.value;
+                    radioInput.required = true;
+                    const span = document.createElement('span');
+                    span.textContent = `${opt.text} (${opt.value} ${t.scoreSuffix})`;
+                    radioLabel.append(radioInput, span);
+                    radioGroup.appendChild(radioLabel);
+                    radioLabel.addEventListener('click', handleRadioClick);
+                });
+                qDiv.appendChild(radioGroup);
+                form.appendChild(qDiv);
+            });
+
+            const submitButton = document.createElement('button');
+            submitButton.type = 'submit';
+            submitButton.textContent = t.submitButton;
+            form.appendChild(submitButton);
+            
+            updateProgress();
+        }
+
+        function handleRadioClick(event) {
+            // Ensure we're targeting the label element
+            const radioLabel = event.currentTarget;
+            if (!radioLabel.classList.contains('radio-label')) return;
+
+            const radioInput = radioLabel.querySelector('input[type="radio"]');
+            if (!radioInput) return;
+
+            // If it's already checked, do nothing
+            if (radioInput.checked) return;
+
+            const groupName = radioInput.name;
+            
+            // Deselect all other labels in the same group
+            document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
+                radio.parentElement.classList.remove('selected');
+            });
+            
+            // Select the clicked label and check its radio button
+            radioLabel.classList.add('selected');
+            radioInput.checked = true;
+            
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const totalQuestions = translations[currentLanguage].questions.length;
+            const answered = form.querySelectorAll('input[type="radio"]:checked').length;
+            progress.style.width = `${(answered / totalQuestions) * 100}%`;
+            const submitButton = form.querySelector('button[type="submit"]');
+            if(submitButton){
+                if (answered === totalQuestions) {
+                    submitButton.classList.add('ready');
+                    submitButton.disabled = false;
+                } else {
+                    submitButton.classList.remove('ready');
+                    submitButton.disabled = true;
+                }
+            }
+        }
+        
+        document.getElementById('lang-th').addEventListener('click', () => {
+            renderSurvey('th');
+            document.getElementById('lang-th').classList.add('active');
+            document.getElementById('lang-en').classList.remove('active');
+        });
+
+        document.getElementById('lang-en').addEventListener('click', () => {
+            renderSurvey('en');
+            document.getElementById('lang-en').classList.add('active');
+            document.getElementById('lang-th').classList.remove('active');
+        });
+
+        // Initial render
+        renderSurvey('th'); 
+        // Initially disable submit button
+        const submitButton = form.querySelector('button[type="submit"]');
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
+    });
+    </script>
+</body>
+</html>

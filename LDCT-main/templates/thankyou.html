@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="{{ lang|default('th') }}">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title id="page-title">ขอบคุณสำหรับข้อมูล</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00796b; /* Teal */
+            --primary-light: #e0f2f1;
+            --accent-color: #ff8a65; /* Light Coral */
+            --background-color: #f5f7fa;
+            --text-color: #37474f;
+            --border-color: #dce1e5;
+            --container-bg: #ffffff;
+            --shadow-color: rgba(50, 50, 93, 0.1);
+            --shadow-hover-color: rgba(50, 50, 93, 0.15);
+        }
+
+        body {
+            background-color: var(--background-color);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Kanit', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-color);
+        }
+        body.en {
+            font-family: 'Roboto', sans-serif;
+        }
+        .thankyou-box {
+            background: var(--container-bg);
+            border-radius: 20px;
+            box-shadow: 0 12px 28px 0 var(--shadow-color);
+            padding: 40px 50px;
+            text-align: center;
+            max-width: 450px;
+            width: 90%;
+        }
+        h1 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        a.button {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--primary-color), #009688);
+            color: #fff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 14px 30px;
+            border-radius: 12px;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(0, 121, 107, 0.25);
+        }
+        a.button:hover {
+            background: linear-gradient(90deg, #00695c, #00796b);
+            box-shadow: 0 7px 25px rgba(0, 121, 107, 0.35);
+            transform: translateY(-2px);
+        }
+        @media (max-width: 500px) {
+            .thankyou-box { padding: 30px 30px; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body class="{{ lang|default('th') }}">
+    <div class="thankyou-box">
+        <h1 id="thank-you-message">ขอบคุณ {{ name }} สำหรับการติดต่อกลับ!</h1>
+        <a href="/" class="button" id="back-button">กลับไปหน้าแบบสอบถาม</a>
+    </div>
+    <script>
+        const translations = {
+            th: {
+                pageTitle: "ขอบคุณสำหรับข้อมูล",
+                thankYouMessage: `ขอบคุณ {{ name }} สำหรับการติดต่อกลับ!`,
+                backButton: "กลับไปหน้าแบบสอบถาม"
+            },
+            en: {
+                pageTitle: "Thank You",
+                thankYouMessage: `Thank you for your submission, {{ name }}!`,
+                backButton: "Back to Survey"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = document.body.classList.contains('en') ? 'en' : 'th';
+            const t = translations[lang];
+            
+            document.getElementById('page-title').textContent = t.pageTitle;
+            document.getElementById('thank-you-message').textContent = t.thankYouMessage.replace('{{ name }}', '{{ name }}');
+            document.getElementById('back-button').textContent = t.backButton;
+        });
+    </script>
+</body>
+</html>

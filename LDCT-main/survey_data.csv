@@ -1,0 +1,2 @@
+timestamp,lang,smoking,years_smoking,secondhand_smoke,pm25,chronic_cough,shortness_of_breath,wheezing,lung_disease_history,family_cancer_history,total_score,risk_level,recommendation,name,email
+2025-07-02T21:40:24,th,1,1,1,1,1,1,1,1,2,10,ความเสี่ยงสูง,ควรพบแพทย์เฉพาะทางโรคปอดทันที และตรวจ CT Chest Low dose,gob,danuchakorn.gob@gmail.com

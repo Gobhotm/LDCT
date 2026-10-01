@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="{{ lang|default('th') }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">ผลการประเมินความเสี่ยงโรคปอด</title>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #00796b; /* Teal */
+            --primary-light: #e0f2f1;
+            --accent-color: #ff8a65; /* Light Coral */
+            --background-color: #f5f7fa;
+            --text-color: #37474f;
+            --border-color: #dce1e5;
+            --container-bg: #ffffff;
+            --shadow-color: rgba(50, 50, 93, 0.1);
+            --shadow-hover-color: rgba(50, 50, 93, 0.15);
+            --success-color: #2e7d32;
+            --warning-color: #f57c00;
+            --danger-color: #d32f2f;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        body { 
+            font-family: 'Kanit', sans-serif; 
+            padding: 0; 
+            margin: 0; 
+            background-color: var(--background-color);
+            min-height: 100vh; 
+            overflow-y: auto; 
+            overflow-x: hidden; 
+            color: var(--text-color);
+        }
+        body.en { font-family: 'Roboto', sans-serif; }
+
+        .card { 
+            background-color: var(--container-bg); 
+            padding: 35px 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 12px 28px 0 var(--shadow-color);
+            max-width: 550px; 
+            width: 90%; 
+            margin: 2rem auto; 
+            text-align: center; 
+            opacity: 0; 
+            transform: translateY(20px); 
+            animation: fadeIn 0.5s ease-out 0.2s forwards; 
+            position: relative; 
+            z-index: 10; 
+        }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
+
+        .result-header { 
+            font-weight: 700; 
+            font-size: 1.8rem; 
+            color: var(--primary-color); 
+            margin-bottom: 25px; 
+        }
+
+        .score-gauge { 
+            position: relative; 
+            width: 200px; 
+            height: 200px; 
+            margin: 0 auto 25px auto; 
+        }
+        .score-gauge svg { 
+            width: 100%; 
+            height: 100%; 
+            transform: rotate(-90deg); 
+        }
+        .score-gauge .gauge-track { 
+            fill: none; 
+            stroke: #e9ecef; 
+            stroke-width: 15; 
+        }
+        .score-gauge .gauge-fill { 
+            fill: none; 
+            stroke: var(--primary-color); 
+            stroke-width: 15; 
+            stroke-linecap: round; 
+            transition: stroke-dashoffset 1.5s cubic-bezier(0.23, 1, 0.32, 1); 
+        }
+        .score-text { 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+        }
+        .score-text .score-number { 
+            font-size: 4rem; 
+            font-weight: 700; 
+            line-height: 1; 
+        }
+        .score-text .score-label { 
+            font-size: 1rem; 
+            color: #555; 
+            margin-top: -5px; 
+            display: block; 
+        }
+
+        .result-section { 
+            text-align: left; 
+            margin-top: 15px; 
+            padding: 15px; 
+            border-radius: 12px; 
+            background-color: #f8f9fa; 
+            display: flex; 
+            align-items: flex-start; 
+            gap: 15px; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .result-section .icon { 
+            flex-shrink: 0; 
+            width: 32px; 
+            height: 32px; 
+            color: var(--primary-color);
+        }
+        .result-label { 
+            font-weight: 600; 
+            color: var(--primary-color); 
+            display: block; 
+            margin-bottom: 4px; 
+            font-size: 1.05rem;
+        }
+        .result-section span:last-child { 
+            font-size: 0.95rem; 
+            line-height: 1.5; 
+            color: #546e7a;
+        }
+
+        hr { 
+            margin: 28px 0; 
+            border: none; 
+            border-top: 1px solid #e9ecef; 
+        }
+
+        .action-button { 
+            display: inline-block; 
+            background: linear-gradient(90deg, var(--primary-color), #009688); 
+            color: white; 
+            padding: 14px 30px; 
+            border: none; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-size: 1.1rem; 
+            font-weight: 600; 
+            text-decoration: none; 
+            box-shadow: 0 4px 20px rgba(0, 121, 107, 0.25);
+            transition: all 0.3s ease; 
+        }
+        .action-button:hover { 
+            background: linear-gradient(90deg, #00695c, #00796b); 
+            box-shadow: 0 7px 25px rgba(0, 121, 107, 0.35);
+            transform: translateY(-2px); 
+        }
+
+        .risk-low .gauge-fill { stroke: var(--success-color); } 
+        .risk-low .score-number { color: var(--success-color); } 
+        .risk-low .icon { color: var(--success-color); }
+        .risk-medium .gauge-fill { stroke: var(--warning-color); } 
+        .risk-medium .score-number { color: var(--warning-color); } 
+        .risk-medium .icon { color: var(--warning-color); }
+        .risk-high .gauge-fill { stroke: var(--danger-color); } 
+        .risk-high .score-number { color: var(--danger-color); } 
+        .risk-high .icon { color: var(--danger-color); }
+
+        .confetti { position: fixed; top: -10px; width: 10px; height: 10px; z-index: 1000; animation: fall 5s linear forwards; }
+        @keyframes fall { to { transform: translateY(105vh); } }
+
+        .contact-form h3 { 
+            color: var(--primary-color); 
+            margin-bottom: 15px; 
+            font-weight: 600;
+        }
+        .contact-form label { 
+            display: block; 
+            text-align: left; 
+            color: #555; 
+            margin-bottom: 5px; 
+            font-size: 0.95rem;
+        }
+        .contact-form input { 
+            width: 100%; 
+            padding: 12px; 
+            margin-bottom: 15px; 
+            border: 1.5px solid var(--border-color); 
+            border-radius: 8px; 
+            font-size: 1rem; 
+            transition: border-color 0.3s;
+        }
+        .contact-form input:focus { 
+            border-color: var(--primary-color); 
+            outline: none; 
+            box-shadow: 0 0 0 3px var(--primary-light);
+        }
+
+        .modal-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.6); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            opacity: 0; 
+            visibility: hidden; 
+            transition: opacity 0.3s; 
+            z-index: 2000; 
+        }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .modal-content { 
+            background: var(--container-bg); 
+            padding: 40px; 
+            border-radius: 20px; 
+            text-align: center; 
+            max-width: 450px; 
+            width: 90%; 
+            transform: scale(0.9); 
+            transition: transform 0.3s; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .modal-overlay.visible .modal-content { transform: scale(1); }
+        .modal-content h2 { 
+            color: var(--success-color); 
+            margin: 0 0 10px 0; 
+            font-weight: 700;
+        }
+        .modal-content p { 
+            color: #555; 
+            font-size: 1.1rem; 
+            margin-bottom: 25px;
+        }
+        .modal-content .close-button { 
+            background: var(--primary-color); 
+            color: white; 
+            padding: 12px 25px; 
+            border-radius: 10px; 
+            text-decoration: none; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        .modal-content .close-button:hover { 
+            background: #005f56; 
+        }
+    </style>
+</head>
+<body class="{{ lang|default('th') }}">
+    <div class="card" id="result-card">
+        <h1 class="result-header" id="result-header">ผลการประเมินความเสี่ยงโรคปอด</h1>
+        <div class="score-gauge">
+            <svg viewBox="0 0 100 100"><circle class="gauge-track" cx="50" cy="50" r="42"></circle><circle id="gauge-fill" class="gauge-fill" cx="50" cy="50" r="42"></circle></svg>
+            <div class="score-text">
+                <span id="total-score" class="score-number">{{ total_score }}</span>
+                <span id="score-label" class="score-label">คะแนน</span>
+            </div>
+        </div>
+        <div class="result-section">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg></div>
+            <div><span class="result-label" id="risk-level-label">ระดับความเสี่ยง</span><span>{{ risk_level }}</span></div>
+        </div>
+        <div class="result-section">
+            <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" /></svg></div>
+            <div><span class="result-label" id="recommendation-label">คำแนะนำ</span><span>{{ recommendation }}</span></div>
+        </div>
+        <hr>
+        <div class="contact-form">
+            <h3 id="contact-header">กรอกข้อมูลสำหรับติดต่อกลับ</h3>
+            <form id="contactForm" method="POST" action="{{ url_for('contact') }}">
+                <input type="hidden" name="timestamp" value="{{ timestamp }}">
+                <input type="hidden" name="lang" value="{{ lang|default('th') }}">
+                <label for="name" id="name-label">ชื่อ:</label>
+                <input type="text" name="name" id="name" placeholder="กรุณากรอกชื่อ" required>
+                <label for="email" id="email-label">E-mail:</label>
+                <input type="email" name="email" id="email" placeholder="example@email.com" required>
+                <button type="submit" class="action-button" id="submit-contact-button">ส่งข้อมูลการติดต่อ</button>
+            </form>
+            <hr>
+            <a href="/" id="retake-survey-link" class="action-button" style="background: #6c757d; margin-top: 15px;">กลับไปทำแบบสอบถามใหม่</a>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="thankyou-modal">
+        <div class="modal-content">
+            <h2 id="modal-header">ส่งข้อมูลเรียบร้อย!</h2>
+            <p id="modal-text">ขอบคุณ <strong id="modal-name"></strong> สำหรับข้อมูล</p>
+            <button class="close-button" id="close-modal-button">ปิด</button>
+        </div>
+    </div>
+
+    <script>
+        const translations = {
+            th: {
+                pageTitle: "ผลการประเมินความเสี่ยงโรคปอด",
+                resultHeader: "ผลการประเมินความเสี่ยงโรคปอด",
+                scoreLabel: "คะแนน",
+                riskLevelLabel: "ระดับความเสี่ยง",
+                recommendationLabel: "คำแนะนำ",
+                contactHeader: "กรอกข้อมูลสำหรับติดต่อกลับ",
+                nameLabel: "ชื่อ:",
+                namePlaceholder: "กรุณากรอกชื่อ",
+                emailLabel: "E-mail:",
+                submitContactButton: "ส่งข้อมูลการติดต่อ",
+                retakeSurveyLink: "กลับไปทำแบบสอบถามใหม่",
+                modalHeader: "ส่งข้อมูลเรียบร้อย!",
+                modalText: "ขอบคุณ {name} สำหรับข้อมูล",
+                submitting: "กำลังส่ง...",
+                submitted: "ส่งข้อมูลแล้ว",
+                errorOccurred: "เกิดข้อผิดพลาด: ",
+                connectionError: "เกิดข้อผิดพลาดในการเชื่อมต่อ",
+                modalClose: "ปิด",
+                riskLow: "ความเสี่ยงต่ำ",
+                riskMedium: "ความเสี่ยงปานกลาง",
+                riskHigh: "ความเสี่ยงสูง"
+            },
+            en: {
+                pageTitle: "Lung Risk Assessment Results",
+                resultHeader: "Lung Risk Assessment Results",
+                scoreLabel: "Score",
+                riskLevelLabel: "Risk Level",
+                recommendationLabel: "Recommendation",
+                contactHeader: "Enter Your Contact Information",
+                nameLabel: "Name:",
+                namePlaceholder: "Please enter your name",
+                emailLabel: "E-mail:",
+                submitContactButton: "Submit Contact Info",
+                retakeSurveyLink: "Take the survey again",
+                modalHeader: "Information Sent!",
+                modalText: "Thank you, {name}, for your information.",
+                submitting: "Submitting...",
+                submitted: "Submitted",
+                errorOccurred: "An error occurred: ",
+                connectionError: "Connection error",
+                modalClose: "Close",
+                riskLow: "Low Risk",
+                riskMedium: "Medium Risk",
+                riskHigh: "High Risk"
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const lang = document.body.classList.contains('en') ? 'en' : 'th';
+            const t = translations[lang];
+
+            // Set text content based on language
+            document.getElementById('page-title').textContent = t.pageTitle;
+            document.getElementById('result-header').textContent = t.resultHeader;
+            document.getElementById('score-label').textContent = t.scoreLabel;
+            document.getElementById('risk-level-label').textContent = t.riskLevelLabel;
+            document.getElementById('recommendation-label').textContent = t.recommendationLabel;
+            document.getElementById('contact-header').textContent = t.contactHeader;
+            document.getElementById('name-label').textContent = t.nameLabel;
+            document.getElementById('name').placeholder = t.namePlaceholder;
+            document.getElementById('email-label').textContent = t.emailLabel;
+            document.getElementById('submit-contact-button').textContent = t.submitContactButton;
+            document.getElementById('retake-survey-link').textContent = t.retakeSurveyLink;
+            document.getElementById('modal-header').textContent = t.modalHeader;
+            document.getElementById('close-modal-button').textContent = t.modalClose;
+            
+            const score = parseInt('{{ total_score }}', 10);
+            const riskKey = '{{ risk_key }}'; // e.g., 'low', 'medium', 'high'
+            const cardEl = document.getElementById('result-card');
+            const scoreNumberEl = document.getElementById('total-score');
+            const gaugeFill = document.getElementById('gauge-fill');
+            const contactForm = document.getElementById('contactForm');
+            const thankYouModal = document.getElementById('thankyou-modal');
+            const closeModalButton = document.getElementById('close-modal-button');
+            const modalName = document.getElementById('modal-name');
+            const modalTextEl = document.getElementById('modal-text');
+
+            const MAX_SCORE = 18;
+            const CIRCUMFERENCE = 2 * Math.PI * 42;
+
+            function setGauge(val) {
+                setTimeout(() => {
+                    const percentage = Math.max(0, Math.min(100, (val / MAX_SCORE) * 100));
+                    gaugeFill.style.strokeDashoffset = CIRCUMFERENCE - (percentage / 100) * CIRCUMFERENCE;
+                }, 300);
+                gaugeFill.style.strokeDasharray = CIRCUMFERENCE;
+                gaugeFill.style.strokeDashoffset = CIRCUMFERENCE;
+            }
+
+            function animateScore(target) {
+                let current = 0;
+                const inc = Math.ceil(target / 50) || 1;
+                const i = setInterval(() => {
+                    current += inc;
+                    if (current >= target) {
+                        current = target;
+                        clearInterval(i);
+                    }
+                    scoreNumberEl.textContent = current;
+                }, 25);
+            }
+
+            function launchConfetti() {
+                const c = ['#00796b', '#26a69a', '#80cbc4', '#e0f2f1']; // Updated confetti colors
+                for (let i = 0; i < 100; i++) {
+                    const d = document.createElement('div');
+                    d.className = 'confetti';
+                    d.style.left = Math.random() * 100 + 'vw';
+                    d.style.animationDelay = Math.random() * 2 + 's';
+                    d.style.backgroundColor = c[Math.floor(Math.random() * c.length)];
+                    d.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    document.body.appendChild(d);
+                }
+            }
+
+            contactForm.addEventListener('submit', function(event) {
+                event.preventDefault();
+                const formData = new FormData(contactForm);
+                const submitButton = contactForm.querySelector('button');
+                submitButton.textContent = t.submitting;
+                submitButton.disabled = true;
+
+                fetch("{{ url_for('contact') }}", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        modalTextEl.innerHTML = t.modalText.replace('{name}', `<strong>${data.name}</strong>`);
+                        thankYouModal.classList.add('visible');
+                        submitButton.textContent = t.submitted;
+                    } else {
+                        alert(t.errorOccurred + data.error);
+                        submitButton.textContent = t.submitContactButton;
+                        submitButton.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(t.connectionError);
+                    submitButton.textContent = t.submitContactButton;
+                    submitButton.disabled = false;
+                });
+            });
+
+            closeModalButton.addEventListener('click', () => thankYouModal.classList.remove('visible'));
+
+            if (!isNaN(score)) {
+                let riskClass = `risk-${riskKey}`;
+                cardEl.classList.add(riskClass);
+                if (riskClass === 'risk-low') launchConfetti();
+                setGauge(score);
+                animateScore(score);
+            }
+        });
+    </script>
+</body>
+</html>
